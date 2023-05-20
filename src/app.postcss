@@ -2,3 +2,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.titlebar {
+    @apply h-7 select-none flex flex-row fixed top-0 left-0 right-0 border-b bg-slate-700 z-50
+}
+.titlebar-button {
+    @apply inline-flex items-center w-7 h-7 justify-center z-50
+}
+.titlebar-button:hover {
+    background: #5bbec3;
+}
