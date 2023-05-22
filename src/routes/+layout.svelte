@@ -25,6 +25,15 @@
   
     <div class="inline-flex flex-row-reverse">
   
+      <div class="titlebar-button" id="titlebar-close">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <img src="https://api.iconify.design/mdi:close.svg?color=white" 
+        alt="close" 
+        on:click={() => appWindow.close()}
+        width="20px"
+        height="20px"
+        />
+      </div>
       <div class="titlebar-button" id="titlebar-maximize">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <img
@@ -45,9 +54,10 @@
           on:click={() => appWindow.minimize()}
           width="20px"
           height="20px"
-
           />
         </div>
+
+
   
     </div>
   
