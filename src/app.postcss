@@ -4,11 +4,42 @@
 @tailwind utilities;
 
 .titlebar {
-    @apply h-7 select-none flex flex-row fixed top-0 left-0 right-0 border-b bg-slate-700 z-50 shadow-md shadow-black
+    @apply h-7 select-none flex flex-row fixed top-0 left-0 right-0 border-b bg-slate-800 z-50 shadow-md shadow-black 
 }
 .titlebar-button {
-    @apply inline-flex items-center w-7 h-7 justify-center z-50
+    @apply inline-flex items-center w-7 h-7 justify-center z-50 hover:bg-rose-900 transition-all
 }
-.titlebar-button:hover {
+
+/* .titlebar-button:hover {
     background: #5bbec3;
+} */
+
+/* width */
+::-webkit-scrollbar {
+width: 9px;
+margin-top: 28px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+@apply bg-slate-800
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+@apply bg-indigo-500
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+@apply bg-blue-700 
+}
+
+.bsky-handle {
+    @apply opacity-60 italic before:content-['@'] text-xs
+}
+
+p {
+    @apply text-slate-300
 }

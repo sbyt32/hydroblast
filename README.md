@@ -1,10 +1,16 @@
 # Hydroblast
-## Alternative Title: *Yet Another Bluesky Client*
+### Alternative Title: *Yet Another Bluesky Client*
 
-### How to run
+todo: write up the readme
+
+## how to run
 ```
 npm install
 npm run tauri dev
 ```
 
-todo: write up the readme
+## pics
+
+![Home](images/home.png)
+![Profile](images/profile.png)
+

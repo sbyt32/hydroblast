@@ -7,25 +7,26 @@
 
     function handleLogin(login:bskyCreds) {
         bskyLogin({...login})
-        $logged_in = true
         setTimeout(() => {
+            $logged_in = true
             goto("/")
-        }, 500)
+        }, 750)
     }
 </script>
 
-<div class="flex flex-col text-center">
+<div class="flex flex-col text-center justify-center grow">
     <div class="inline-flex flex-col gap-2 justify-center h-full">
             <label>
                 Username
-                <input name="ID" type="text" bind:value={data.identifier}/>
+                <input name="ID" type="text" bind:value={data.identifier} placeholder="hello.bsky.social"/>
             </label>
             <label>
                 Password
-                <input name="Password" type="password" bind:value={data.password}/>
+                <input name="Password" type="password" bind:value={data.password} placeholder="app password"/>
             </label>
             <button
                 on:click={() => handleLogin(data)}
+                disabled={!data.password && !data.identifier}
             >
                 Log in
             </button>
