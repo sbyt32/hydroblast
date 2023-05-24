@@ -1,11 +1,8 @@
 <script lang="ts">
     import type { Response } from "@atproto/api/dist/client/types/app/bsky/feed/getTimeline";
     import TimelinePost from "$lib/components/post/TimelinePost.svelte";
-    import { goto } from "$app/navigation";
     import { bskyClient } from "$lib/bsky";
-    import { logged_in, refresh } from "$lib/stores";
     import { onMount } from "svelte";
-    import { BskyAgent } from "@atproto/api";
     export let timelineType = "timeline"
     export let DID:string | null = null
 
@@ -15,13 +12,16 @@
         switch (timelineType) {
             case "timeline":
                 timelineData = await bskyClient.getTimeline()
+                break;
             case "userpost":
                 if (DID) {
                     timelineData = await bskyClient.getAuthorFeed({actor: DID})
                 }
+                break;
             case "fur":
                 // console.log(await bskyClient.api.app.bsky.feed.getActorFeeds({actor: "furryli.st"}))
                 timelineData = await bskyClient.api.app.bsky.feed.getFeed({feed: "at://did:plc:jdkvwye2lf4mingzk7qdebzc/app.bsky.feed.generator/furry-new"})
+                break;
                 // timelineData = await bskyClient.getAuthorFeed({actor: })
             default:
                 break;
