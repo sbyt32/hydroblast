@@ -2,8 +2,7 @@
     import { bskyClient } from "$lib/bsky";
     import { page } from "$app/stores"
     import Icon from "$lib/user/Icon.svelte";
-    import { userData } from "$lib/stores";
-    import TimelinePost from "$lib/components/TimelinePost.svelte";
+    import Timeline from "$lib/components/page/Timeline.svelte";
 </script>
 
 {#await bskyClient.getProfile({actor: $page.params.user}) then userData}        
@@ -30,32 +29,12 @@
             </div>
 
 
-            <div class="flex flex-col">
-                {#await bskyClient.getAuthorFeed({actor: $page.params.user, limit: 30}) then userFeed}
-                    {#each userFeed.data.feed as userPost}
-                        <TimelinePost
-                            avatar={userPost.post.author.avatar}
-                            displayName={userPost.post.author.displayName}
-                            text={userPost.post.record.text}
-                            handle={userPost.post.author.handle}
-                            reskeetedBy={userPost.reason?.by?.displayName}
-                            reskeetedByIcon={userPost.reason?.by?.avatar}
-                            reskeetedByHandle={userPost.reason?.by?.handle}
-                            replySkeetData={
-                                {
-                                    avatar: userPost.reply?.parent?.author?.avatar,
-                                    displayName: userPost.reply?.parent?.author?.displayName,
-                                    text: userPost.reply?.parent?.record?.text,
-                                    handle: userPost.reply?.parent?.author?.handle,
-                                    images: userPost.reply?.parent.images
-                                }
-                            }
-                            images={userPost.post.embed?.images}
-                        />
-                    {/each}
-                {/await}
-            </div>
-        </div>    
+
+                <Timeline
+                    timelineType="userpost"
+                    DID={$page.params.user}
+                />
+        </div> 
 
     
-{/await}``
+{/await}

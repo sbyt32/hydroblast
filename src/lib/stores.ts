@@ -14,3 +14,5 @@ export const userData = writable(
         displayName: "null"
     }
 )
+
+export const currentRoute = writable("Home")

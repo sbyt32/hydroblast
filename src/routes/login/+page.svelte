@@ -13,30 +13,40 @@
         }, 750)
     }
 </script>
-
-<div class="flex flex-col text-center justify-center grow">
-    <div class="inline-flex flex-col gap-2 justify-center h-full">
+<div class=" text-center justify-center grow h-[calc(100vh-28px)]">
+    <div class="inline-flex flex-col justify-center h-full border-blue-700 h w-1/4">
+        <div class="inline-flex flex-col bg-indigo-200/10 rounded-2xl gap-4 p-3">
             <label>
-                Username
                 <input name="ID" type="text" bind:value={data.identifier} placeholder="hello.bsky.social"/>
             </label>
             <label>
-                Password
-                <input name="Password" type="password" bind:value={data.password} placeholder="app password"/>
+                
+                <input name="Password" type="password" bind:value={data.password} placeholder="Password"/>
             </label>
-            <button
+            <div>
+                <button
                 on:click={() => handleLogin(data)}
                 disabled={!data.password && !data.identifier}
+                class="text-slate-300 disabled:text-slate-300/30 bg-slate-700 px-4 rounded-md"
             >
-                Log in
+                Log In
             </button>
+
+            </div>
+
+        </div>
+
     </div>
 </div>
 
 <style lang="postcss">
 
 label {
-    @apply bg-indigo-400/40 p-2
+    @apply bg-indigo-400/20 px-2 py-3 rounded-md
+}
+
+input {
+    @apply focus:text-left placeholder-shown:text-center placeholder:text-center bg-slate-700 border-black border 
 }
 
 </style>

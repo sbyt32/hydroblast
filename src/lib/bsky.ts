@@ -2,7 +2,6 @@ import { BskyAgent } from '@atproto/api'
 import { logged_in, userData } from './stores'
 import type { AtpSessionEvent, AtpSessionData } from '@atproto/api'
 
-
 export const bskyClient = new BskyAgent(
     {
         service: "https://bsky.social",

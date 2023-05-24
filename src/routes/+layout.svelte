@@ -2,14 +2,14 @@
   import { goto } from "$app/navigation";
   import { invoke } from "@tauri-apps/api/tauri";
   import { appWindow } from "@tauri-apps/api/window";
-  import { logged_in } from "$lib/stores"
+  import { logged_in, currentRoute } from "$lib/stores"
   import "../app.postcss";
   import UserBar from "$lib/UserBar.svelte";
 
 
-  async function titleName(route:string) {
-    return await invoke('titlebar_name', {route})
-  }
+  // async function titleName(route:string) {
+  //   return await invoke('titlebar_name', {route})
+  // }
 
 </script>
 
@@ -17,9 +17,12 @@
   <div data-tauri-drag-region class="titlebar overflow-hidden">
   
     <div class="text-slate-200 text-center text-sm pt-0.5 grow justify-center" data-tauri-drag-region>
-      {#await titleName('Home') then data}
+      {#key currentRoute}
+        Hydroblast - {$currentRoute}
+      {/key}
+      <!-- {#await titleName('Home') then data}
         {data}
-      {/await}
+      {/await} -->
     </div>
   
   
