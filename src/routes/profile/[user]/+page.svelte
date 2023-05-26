@@ -6,9 +6,8 @@
 </script>
 
 {#await bskyClient.getProfile({actor: $page.params.user}) then userData}        
-    <div class="max-h-[calc(100vh-28px)] border-l-2 border-blue-700 grow overflow-x-auto">
 
-        <div class="flex flex-col relative mb-2 border-blue-600 border-b-2 shadow-md shadow-gray-600">
+        <div class="flex flex-col relative mb-2 border-blue-600 border-b-2 shadow-md shadow-gray-600 h-48">
             <img src={userData.data.banner} class="w-full h-48 object-cover opacity-70 select-none" alt="{userData.data.displayName}'s banner.">        
             <div class="absolute bottom-0">
                 <span class="inline-flex flex-row bottom-0">
@@ -25,13 +24,14 @@
                     </span>
                 </span>
             </div>
+            
         </div>
 
 
+        <Timeline
+            timelineType="userpost"
+            DID={$page.params.user}
+            hasBanner={true}
+        />
 
-            <Timeline
-                timelineType="userpost"
-                DID={$page.params.user}
-            />
-    </div>     
 {/await}

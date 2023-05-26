@@ -1,22 +1,23 @@
 <script lang="ts">
     import Icon from "$lib/user/Icon.svelte";
     import { bskyClient } from "$lib/bsky";
-    import { AppBskyFeedPost, RichText } from "@atproto/api"
+    import { RichText } from "@atproto/api"
     import { AppBskyEmbedImages } from "@atproto/api";
-    
-    // TODO: make this a interface
-    export let avatar: string | undefined
-    export let displayName: string | undefined
-    export let skeet: {} | undefined
-    export let handle: string | undefined
-    export let images: [] | unknown
+    import type { ProfileViewBasic} from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+    import type { View } from "@atproto/api/dist/client/types/app/bsky/embed/images";
+    import type { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+    // AppBskyEmbedImages
 
-    // const regexLink = "(http[s]?://[\w./-]*)"
+    // TODO: make this a interface
+    export let author: ProfileViewBasic
+    export let skeet: PostView
+
+
     async function parseSkeet(record: any) {
         const rt = new RichText(record)
         await rt.detectFacets(bskyClient)
         
-        let markdown = '<p>'
+        let markdown = ''
         for (const segment of rt.segments()) {
             if (segment.isLink()) {
                 markdown += `
@@ -32,62 +33,74 @@
                 markdown += segment.text
         }
         }
-        // let respHTML: string = ""
-        // markdown.split('\n').forEach(e => {
-        //     respHTML += `${e}`
-        // })
-
-
-        // return respHTML + "</p>"
+        
         return markdown
     }
 </script>
 
-<div class="inline-flex flex-row gap-2">
-    {#await parseSkeet(skeet) then skoot}
+<div class="inline-flex flex-row gap-2 pb-2 ">
 
         <Icon
-        avatar={avatar}
-        displayName={displayName}
-        handle={handle}
+        avatar={author.avatar}
+        displayName={author.displayName}
+        handle={author.handle}
         />
-    <div class='inline-flex flex-col text-left text-slate-300 mt-2'>
+    <div class='inline-flex flex-col text-left text-slate-300 mt-2 w-full'>
 
-        <span class="text-base flex flex-col leading-5">
-            <p>{displayName}</p>
-            <p class="text-xs bsky-handle">{handle}</p>
+        <span class="text-base flex flex-col leading-5 ">
+            <span class="inline-flex flex-row">
+                <p class="w-full">{author.displayName}</p>
+
+                {#if !author.viewer?.following}
+                    <button class="text-right -mt-0.5 mx-20 bg-slate-700" on:click={() => bskyClient.follow(author.did)}>Follow</button>                    
+                {/if}
+            
+            </span>
+            <p class="text-xs bsky-handle">{author.handle}</p>
         </span>
 
         {#if skeet != undefined}
-            <div class="text-white leading-relaxed">
-                    {@html skoot}
+            {#await parseSkeet(skeet.record) then skoot}
+                <div class="text-white leading-relaxed prose">
+                        {@html skoot}
+                </div>
+            {/await}
+
+            {#if AppBskyEmbedImages.isView(skeet.embed)}
+            <div class="flex flex-wrap gap-2">
+                {#each skeet.embed.images as image}
+                    <img 
+                    src={image.thumb} 
+                    alt="{image.alt}" 
+                    class="rounded-lg overflow-hidden object-fill w-1/2 max-w-xs h-full max-h-48 grow basis-1/3 z-10"
+                    >
+                {/each}
             </div>
+            {/if}
+
         {/if}
 
-        {#if images}
-        <div class="flex flex-wrap gap-2">
 
-            {#each images as image}
-                <img 
-                src={image.thumb} 
-                alt="{image.alt}" 
-                class="rounded-lg overflow-clip object-fill w-1/2 max-w-xs h-full max-h-80  grow basis-1/3"
-                >
-            {/each}
-        </div>
-        {/if}
 
         <!-- TODO: like and reskeet -->
-        <!-- <div class="inline-flex flex-row gap-8 pt-4">
-            <button on:click={() => bskyClient.like(uri, cid)}>
-                Like
+        <div class="inline-flex flex-row gap-4 mt-3 pt-1 text-base opacity-60">
+            <button>
+                🗨️ <span class="tabular-nums pl-1">{skeet.replyCount}</span>
             </button>
-            <button on:click={() => bskyClient.repost(uri, cid)}>
-                ReSkeet
+            <button on:click={() => skeet.viewer?.like ? bskyClient.deleteLike(skeet.viewer?.like) : bskyClient.like(skeet.uri, skeet.cid)}>
+                👍 <span class="tabular-nums">{skeet.likeCount}</span>
             </button>
-        </div> -->
+            <button on:click={() => skeet.viewer?.repost ? bskyClient.deleteRepost(skeet.viewer?.repost) : bskyClient.repost(skeet.uri, skeet.cid)}>
+                💦 <span class="tabular-nums">{skeet.repostCount}</span>
+            </button>
+        </div>
 
     </div>
-    {/await}
 
 </div>
+
+<style lang="postcss">
+button {
+    @apply  rounded px-1.5 py-0.5 hover:bg-slate-700 transition-all  hover:opacity-100
+}
+</style>

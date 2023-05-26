@@ -16,3 +16,5 @@ export const userData = writable(
 )
 
 export const currentRoute = writable("Home")
+
+export const postSkeet = writable(false)

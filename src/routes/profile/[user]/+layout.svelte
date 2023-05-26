@@ -5,4 +5,5 @@ $currentRoute = `@${$page.params.user}`
 </script>
 
 <slot>
+    
 </slot>

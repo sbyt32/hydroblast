@@ -1,8 +1,9 @@
 <script lang="ts">
   import { appWindow } from "@tauri-apps/api/window";
-  import { logged_in, currentRoute } from "$lib/stores"
+  import { logged_in, currentRoute, postSkeet } from "$lib/stores"
   import "../app.postcss";
   import UserBar from "$lib/UserBar.svelte";
+  import PostSkeet from "$lib/components/page/PostSkeet.svelte";
 
 
   // async function titleName(route:string) {
@@ -18,9 +19,6 @@
       {#key currentRoute}
         Hydroblast - {$currentRoute}
       {/key}
-      <!-- {#await titleName('Home') then data}
-        {data}
-      {/await} -->
     </div>
   
   
@@ -65,11 +63,22 @@
   </div>
   
   <body class="mt-7">
+    {#if $postSkeet}
+      <PostSkeet/>
+      
+    {/if}
+
       <div class="flex flex-row">
         {#if $logged_in}
           <UserBar/>
+          <div class="max-h-[calc(100vh-28px)] border-l-2 border-blue-700 w-[calc(100vw-13rem)] relative">
+            <slot />
+          </div>
+        {:else}
+          <slot />
+
         {/if}
-        <slot />
+
       </div>
   </body>
   
