@@ -3,31 +3,37 @@
     import TimelinePost from "$lib/components/post/TimelinePost.svelte";
     import { bskyClient } from "$lib/bsky";
     import { onMount } from "svelte";
-    import { postSkeet } from "$lib/stores";
-    export let timelineType = "timeline"
-    export let DID:string | null = null
+    import { currentRoute, postSkeet } from "$lib/stores";
+
+    interface feedDataType {
+        feedType: "timeline" | "userpost" | "feed"
+        did?: string
+        feedLink?: string
+    }
+    
+    export let feedData: feedDataType | null = null
     export let hasBanner: boolean = false
 
-
-    let timelineData: Response 
+    let timelineData: Response
     onMount(async () => {
-        switch (timelineType) {
+        switch (feedData?.feedType) {
             case "timeline":
-                console.log(await bskyClient.getTimeline());
-                
                 timelineData = await bskyClient.getTimeline()
                 break;
             case "userpost":
-                if (DID) {
-                    timelineData = await bskyClient.getAuthorFeed({actor: DID})
+                if (feedData.did) {
+                    timelineData = await bskyClient.getAuthorFeed({actor: feedData.did})
                 }
                 break;
-            case "fur":
+            case "feed":
                 // TODO: Save Algo
-                console.log(await bskyClient.api.app.bsky.feed.getActorFeeds({actor: "furryli.st"}))
-                timelineData = await bskyClient.api.app.bsky.feed.getFeed({feed: "at://did:plc:jdkvwye2lf4mingzk7qdebzc/app.bsky.feed.generator/furry-new"})
+                // console.log(await bskyClient.api.app.bsky.feed.getActorFeeds({actor: "furryli.st"}))
+                if (feedData.feedLink) {
+                    timelineData = await bskyClient.api.app.bsky.feed.getFeed({feed: feedData.feedLink})
+                    // $currentRoute = timelineData.headers
+                    // console.log(await bskyClient.api.app.bsky.feed.getFeed({feed: feedStuff}));                    
+                }
                 break;
-                // timelineData = await bskyClient.getAuthorFeed({actor: })
             default:
                 break;
         }
@@ -37,8 +43,7 @@
 
 
 
-<div class="border-l-2 border-blue-700 overflow-x-hidden w-full {hasBanner ? 'max-h-[calc(100vh-228px)]': 'max-h-[calc(100vh-28px)]' }" >
-
+<div class="border-l-2 border-blue-700 overflow-x-hidden w-full {hasBanner ? 'max-h-[calc(100vh-220px)]': 'max-h-[calc(100vh-28px)]' }" >
 
     <div class="absolute max-h-screen w-[95%] {hasBanner ? 'h-[calc(95vh-228px)]' : 'h-[calc(95vh-28px)]'}">
         <div class="absolute w-full text-right bottom-0  align-text-bottom z-50">
@@ -56,6 +61,9 @@
         </div>
     </div>
 
+    <slot>
+        
+    </slot>
 
     <div class="flex flex-col">
 

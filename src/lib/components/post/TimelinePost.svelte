@@ -31,7 +31,6 @@
             <Post
                 author={replyData.author}
                 skeet={replyData}
-
             />
 
             {/if}

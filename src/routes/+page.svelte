@@ -22,7 +22,9 @@
 <!-- <div class="max-h-[calc(100vh-28px)] border-l-2 border-blue-700 w-[calc(100vw-13rem)] relative"> -->
 
     <Timeline
-        timelineType="timeline"
+        feedData={{
+            feedType: "timeline"
+        }}
     />
 <!-- </div> -->
 {/if}

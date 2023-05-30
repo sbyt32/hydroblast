@@ -4,7 +4,7 @@
   import "../app.postcss";
   import UserBar from "$lib/UserBar.svelte";
   import PostSkeet from "$lib/components/page/PostSkeet.svelte";
-
+  import { page } from "$app/stores";
 
   // async function titleName(route:string) {
   //   return await invoke('titlebar_name', {route})
@@ -16,8 +16,9 @@
   <div data-tauri-drag-region class="titlebar overflow-hidden">
   
     <div class="text-slate-200 text-center text-sm pt-0.5 grow justify-center" data-tauri-drag-region>
-      {#key currentRoute}
+      {#key $currentRoute}
         Hydroblast - {$currentRoute}
+        {$page.url}
       {/key}
     </div>
   

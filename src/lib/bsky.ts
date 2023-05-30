@@ -1,4 +1,4 @@
-import { BskyAgent } from '@atproto/api'
+import { BskyAgent, RichText } from '@atproto/api'
 import { logged_in, userData } from './stores'
 import type { AtpSessionEvent, AtpSessionData } from '@atproto/api'
 
@@ -16,18 +16,27 @@ export interface bskyCreds {
     password: string
 }
 
-export async function bskyLogin(login:bskyCreds) {
-        const hello = await bskyClient.login({...login})
-        if (hello.success) {
-            logged_in.update(() => true)
-            const user = await bskyClient.getProfile({actor: hello.data.handle})
-            if (user.data.avatar && user.data.displayName && user.data.handle) {
-                userData.set({
-                    avatar: user.data.avatar,
-                    handle: user.data.handle,
-                    displayName: user.data.displayName
-                })    
-            }
-        }
-}
 
+export async function parseSkeet(record: any) {
+    const rt = new RichText(record)
+    await rt.detectFacets(bskyClient)
+    
+    let markdown = ''
+    for (const segment of rt.segments()) {
+        if (segment.isLink()) {
+            markdown += `
+            <a href="${segment.link?.uri}" class="text-slate-300 hover:text-indigo-400 underline" target="_blank">
+                ${segment.text}
+            </a>`
+        } else if (segment.isMention()) {
+            markdown += `
+            <a href="profile/${segment.mention?.did}" class="text-slate-300 hover:text-indigo-400 underline">
+                ${segment.text}
+            </a>`            
+        } else {
+            markdown += segment.text
+    }
+    }
+    
+    return markdown
+}

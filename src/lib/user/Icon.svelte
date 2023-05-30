@@ -9,5 +9,5 @@
     src="{avatar}" 
     alt="{displayName}" 
     class="block {avatarHeight} rounded-md border border-blue-600 m-2 cursor-pointer {addtlClasses}" 
-    on:click={() => goto(`/profile/${handle}/`)}
+    on:click={() => handle ? goto(`/profile/${handle}/`) : ""}
 >
